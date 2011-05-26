@@ -53,7 +53,6 @@ int rect;
 		g.fillRect(i*5, j*5, 4, 4);
 			}
 		}
-		Game.show();
 		Game.setSize(MapX*5,MapY*5);
 		Game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Game.setVisible(true);
