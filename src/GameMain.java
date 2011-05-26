@@ -2,15 +2,13 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 
 
 public class GameMain {
 
 	public static JFrame GameFrame = new JFrame("Game");
-	public static JTextArea text = new JTextArea();
 	public static void main(String[] args) throws IOException {
-			new Map("Map.map");
+			new Map("Map2.map");
 			GameFrame.setSize(300,100);
 			GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			GameFrame.setVisible(true);
