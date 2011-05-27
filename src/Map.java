@@ -7,14 +7,19 @@ import javax.swing.JFrame;
 
 
 public class Map extends JFrame {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 int linenumber = 0;
 String Mapname = null;
 String Author = null;
 static int MapX = 0;
 static int MapY = 0;
 int MapSize = 0;
-int[][] PublicMap = null;
+String[][] PublicMap = null;
 String[] parts = null;
+String[] ColorValues = null;
 int rect;
 	public Map(String Map) throws NumberFormatException, IOException
 	{
@@ -37,10 +42,11 @@ int rect;
 		System.out.println(linenumber + ":Map size is " + MapSize);
 	} else {
 		parts = line.split("-");
-		int[][] MapPeices = new int[MapX][MapY];
+		String[][] MapPeices = new String[MapX][MapY];
 		PublicMap = MapPeices.clone();
-		MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])] = Integer.parseInt(parts[0]);
-		System.out.println(linenumber + ":Data=" + MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])] + " X=" + Integer.parseInt(parts[1]) + "Y=" + Integer.parseInt(parts[1]));
+		ColorValues = MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])].split("+");
+		MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])] = parts[0];
+		System.out.println(linenumber + ":Red=" + ColorValues[0] + ":Green=" + ColorValues[1] + ":Blue=" + ColorValues[2] + ":DataType="+ColorValues[3]+ " X=" + Integer.parseInt(parts[1]) + "Y=" + Integer.parseInt(parts[1]));
 		}
 		linenumber++;	
 	}
