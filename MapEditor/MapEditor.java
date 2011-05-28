@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import javax.swing.*;
 public class MapEditor {
 	static File SaveFile;
+	static File LoadFile;
 	public static JButton Create;
 	public static JTextArea MapX;
 	public static JTextArea MapY;
@@ -26,10 +27,12 @@ public class MapEditor {
 	public static JButton Load = new JButton("Load");
 	public static JButton Save = new JButton("Save");
 	static JFileChooser SaveFileChooser = new JFileChooser();
+	static JFileChooser LoadFileChooser = new JFileChooser();
 	static JFrame MapEdit = new JFrame("Map Editor");
 	static JButton[][] Pixels = new JButton[10][10];
 	static String[][] MapData;
 	static String MapHeader;
+	static JFrame Map;
 	public static void main(String[] args) {
 	GridLayout layout=new GridLayout(2,3);
 	MapEdit.setSize(200,200);
@@ -43,6 +46,7 @@ public class MapEditor {
     New.addActionListener(action);
 	MapEdit.add(New, BorderLayout.CENTER);	
 	MapEdit.add(Load, BorderLayout.CENTER);
+	Load.addActionListener(action);
 	}
 	public static void New()
 	{
@@ -85,20 +89,20 @@ class Action implements ActionListener {
 		}
 		if(e.getSource() == MapEditor.Create)
 		{
-			JFrame Map = new JFrame("Map Editor");
+			MapEditor.Map = new JFrame("Map Editor");
 			MapEditor.MapHeader = MapEditor.MapTitle.getText()+"-"+MapEditor.MapAuth.getText()+"-"+MapEditor.MapX.getText()+"-"+MapEditor.MapY.getText();
 			MapXi = Integer.parseInt(MapEditor.MapX.getText());
 			MapYi = Integer.parseInt(MapEditor.MapY.getText());
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			if(screenSize.width <= Integer.parseInt(MapEditor.MapX.getText())* 10 || screenSize.height <= Integer.parseInt(MapEditor.MapY.getText())* 10)
 			{
-				Map.setBounds(0,0,screenSize.width, screenSize.height);
-				Map.setSize(screenSize.width, screenSize.height);
+				MapEditor.Map.setBounds(0,0,screenSize.width, screenSize.height);
+				MapEditor.Map.setSize(screenSize.width, screenSize.height);
 			} else {
-				Map.setSize(Integer.parseInt(MapEditor.MapX.getText())*10,Integer.parseInt(MapEditor.MapY.getText())*10);
-				Map.setBounds(0,0,Integer.parseInt(MapEditor.MapX.getText())* 10, Integer.parseInt(MapEditor.MapY.getText())* 10);
+				MapEditor.Map.setSize(Integer.parseInt(MapEditor.MapX.getText())*10,Integer.parseInt(MapEditor.MapY.getText())*10);
+				MapEditor.Map.setBounds(0,0,Integer.parseInt(MapEditor.MapX.getText())* 10, Integer.parseInt(MapEditor.MapY.getText())* 10);
 			}
-        	Map.setLayout(new GridLayout(Integer.parseInt(MapEditor.MapX.getText()),Integer.parseInt(MapEditor.MapY.getText())));
+			MapEditor.Map.setLayout(new GridLayout(Integer.parseInt(MapEditor.MapX.getText()),Integer.parseInt(MapEditor.MapY.getText())));
         	MapEditor.Pixels=new JButton[Integer.parseInt(MapEditor.MapX.getText())][Integer.parseInt(MapEditor.MapY.getText())];
 			for(int i=0;i<Integer.parseInt(MapEditor.MapX.getText());i++) {
 				for(int j=0;j<Integer.parseInt(MapEditor.MapY.getText());j++) {
@@ -113,11 +117,11 @@ class Action implements ActionListener {
 						MapEditor.MapData[i][j] = "0+0+0+0";
 					}
 					MapEditor.Pixels[i][j].setToolTipText("Pixel "+i+","+j+": Red - 0: Green - 0: Blue - 0: Data Type - 0");
-					Map.add(MapEditor.Pixels[i][j]);
+					MapEditor.Map.add(MapEditor.Pixels[i][j]);
 				}
 			}
-					Map.setVisible(true);
-					Map.setLocation(300,300);
+					MapEditor.Map.setVisible(true);
+					MapEditor.Map.setLocation(300,300);
 					MapEditor.NewBox.add(MapEditor.Save, BorderLayout.CENTER);
 					MapEditor.MapEdit.setSize(500, 100);
 					MapEditor.MapEdit.add(MapEditor.Save, BorderLayout.WEST);
@@ -148,6 +152,22 @@ class Action implements ActionListener {
 				}
 	        }
 		}
+		if(e.getSource() == MapEditor.Load)
+		{
+			MapEditor.LoadFileChooser.setSize(400, 400);
+			MapEditor.LoadFileChooser.setVisible(true);
+			SaveClass saveclass = new SaveClass();
+			int retval = MapEditor.LoadFileChooser.showOpenDialog(saveclass);
+	        if (retval == JFileChooser.APPROVE_OPTION) {
+	        	MapEditor.LoadFile = MapEditor.LoadFileChooser.getSelectedFile();
+	        	try {
+					LoadMap(MapEditor.LoadFile);
+				} catch (IOException e1) {
+					System.out.println("Error loading map.");
+					e1.printStackTrace();
+				}
+	        }
+		}
 		if(id.getName() != null)
 		{	
 		String[] MapId;
@@ -155,9 +175,8 @@ class Action implements ActionListener {
 		int MapX = Integer.parseInt(MapId[0].replaceAll( "[^\\d]", "" ));
 		int MapY = Integer.parseInt(MapId[1].replaceAll( "[^\\d]", "" ));
 		MapEditor.Pixels[MapX][MapY].setBackground(new Color(Integer.parseInt(MapEditor.Red.getText().replaceAll( "[^\\d]", "" )), Integer.parseInt(MapEditor.Green.getText().replaceAll( "[^\\d]", "" )), Integer.parseInt(MapEditor.Blue.getText().replaceAll( "[^\\d]", "" ))));
-		MapEditor.MapData[MapX][MapY] = MapEditor.Red.getText().replaceAll( "[^\\d]", "" )+"+"+MapEditor.Green.getText().replaceAll( "[^\\d]", "" )+"+"+MapEditor.Blue.getText().replaceAll( "[^\\d]", "" )+"+"+TranslateDataType(MapEditor.DataType.getSelectedItem());
-		String[] temp = MapEditor.MapData[MapX][MapY].split("+");
-		MapEditor.Pixels[MapX][MapY].setToolTipText("Pixel "+MapX+","+MapY+": Red - "+ temp[0]+": Green - "+temp[1]+": Blue - "+temp[2]+": Data Type - "+temp[3]);
+		MapEditor.MapData[MapX][MapY] = MapEditor.Red.getText()+"="+MapEditor.Green.getText()+"="+MapEditor.Blue.getText()+"="+TranslateDataType(MapEditor.DataType.getSelectedItem());
+		MapEditor.Pixels[MapX][MapY].setToolTipText("Pixel "+MapX+","+MapY+": Red - "+ MapEditor.Green.getText()+": Green - "+MapEditor.Green.getText()+": Blue - "+MapEditor.Blue.getText()+": Data Type - "+TranslateDataType(MapEditor.DataType.getSelectedItem()));
 		System.out.println("Pixel "+MapX+","+MapY+" has been set with "+ MapEditor.Red.getText().replaceAll( "[^\\d]", "" )+" and "+MapEditor.Green.getText().replaceAll( "[^\\d]", "" )+" and "+MapEditor.Blue.getText().replaceAll( "[^\\d]", "" )+" as type "+TranslateDataType(MapEditor.DataType.getSelectedItem())+"!");
 		}
 		if((Integer.parseInt(MapEditor.Red.getText().replaceAll( "[^\\d]", "" )) > 255) || (Integer.parseInt(MapEditor.Green.getText().replaceAll( "[^\\d]", "" )) > 255) || (Integer.parseInt(MapEditor.Blue.getText().replaceAll( "[^\\d]", "" )) > 255)|| (Integer.parseInt(MapEditor.Red.getText().replaceAll( "[^\\d]", "" )) < 0) || (Integer.parseInt(MapEditor.Green.getText().replaceAll( "[^\\d]", "" )) < 0) || (Integer.parseInt(MapEditor.Blue.getText().replaceAll( "[^\\d]", "" )) < 0))
@@ -195,10 +214,74 @@ class Action implements ActionListener {
 				 {
 					 MapEditor.MapData[i][j] = "0+0+0+0";
 				 }
-				 out.write(MapEditor.MapData[i][j]+"-"+i+"-"+j);
+				 out.write(MapEditor.MapData[i][j]+":"+i+"-"+j);
 				 out.newLine();
 			 }
 		 }
+		 out.close();
+	}
+	public void LoadMap(File Save) throws IOException
+	{
+		int LineNumber = 0;
+		MapEditor.Map = new JFrame("Map Editor");
+		 BufferedReader out
+		   = new BufferedReader(new FileReader(Save));
+		 MapEditor.MapHeader = out.readLine();
+		 LineNumber++;
+		 String Size[] = MapEditor.MapHeader.split("-");
+			MapXi = Integer.parseInt(Size[2]);
+			MapYi = Integer.parseInt(Size[3]);
+			MapEditor.MapData = new String[MapXi][MapYi];
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			if(screenSize.width <= MapXi* 10 || screenSize.height <= MapYi* 10)
+			{
+				MapEditor.Map.setBounds(0,0,screenSize.width, screenSize.height);
+				MapEditor.Map.setSize(screenSize.width, screenSize.height);
+			} else {
+				MapEditor.Map.setSize(MapXi*10,MapYi*10);
+				MapEditor.Map.setBounds(0,0,MapXi* 10, MapYi* 10);
+			}
+			MapEditor.Map.setLayout(new GridLayout(MapXi,MapYi));
+	    	MapEditor.Pixels=new JButton[MapXi][MapYi];
+			MapEditor.MapEdit.setSize(500, 100);
+			MapEditor.MapEdit.add(MapEditor.Save, BorderLayout.WEST);
+			MapEditor.MapEdit.add(MapEditor.Red, BorderLayout.WEST);
+			MapEditor.MapEdit.add(MapEditor.Green, BorderLayout.WEST);
+			MapEditor.MapEdit.add(MapEditor.Blue, BorderLayout.WEST);
+			MapEditor.MapEdit.add(MapEditor.DataType, BorderLayout.WEST);
+			MapEditor.DataType.addItem("Open");
+			MapEditor.DataType.addItem("Solid");
+			MapEditor.DataType.addItem("Spawn");
+			MapEditor.DataType.setMaximumRowCount(2);
+			MapEditor.MapEdit.setAlwaysOnTop(true);
+			MapEditor.MapEdit.setVisible(true);
+			MapEditor.Save.addActionListener(this);
+			MapEditor.New.addActionListener(this);
+		 for(int i=0;i<MapXi;i++) {
+			 for(int j=0;j<MapYi;j++) {
+				String line = out.readLine();
+				LineNumber++;
+				String[] line1 = line.split(":");
+				String[] line2 = line1[1].split("-");
+				String[] Data = line1[0].split("=");
+				if(MapEditor.MapData[i][j] == null)
+				{
+					MapEditor.MapData[i][j] = "0+0+0+0";
+				}
+				MapEditor.MapData[Integer.parseInt(line2[0])][Integer.parseInt(line2[1])] = line1[0];
+				MapEditor.Pixels[i][j]= new JButton();
+				MapEditor.Pixels[i][j].setLocation(MapXi*5,MapYi*5);
+				MapEditor.Pixels[i][j].addActionListener(this);
+				MapEditor.Pixels[i][j].setVisible(true);
+				MapEditor.Pixels[i][j].setName(i + "-" + j);
+				MapEditor.Pixels[i][j].setBackground(new Color(Integer.parseInt(Data[0]), Integer.parseInt(Data[1]), Integer.parseInt(Data[2])));
+				MapEditor.Pixels[i][j].setToolTipText("Pixel "+i+","+j+": Red - "+ Data[0]+": Green - "+Data[1]+": Blue - "+Data[2]+": Data Type - "+Data[3]);
+				MapEditor.Map.add(MapEditor.Pixels[i][j]);
+				System.out.println(LineNumber+"~"+i+","+j+": Red - "+ Data[0]+": Green - "+Data[1]+": Blue - "+Data[2]+": Data Type - "+Data[3]+" has been loaded.");
+			 }
+		 }
+			MapEditor.Map.setVisible(true);
+			MapEditor.Map.setLocation(300,300);
 		 out.close();
 	}
 }
@@ -223,7 +306,6 @@ class SaveClass extends JFrame {
 
         this.setJMenuBar(menubar);
         this.setContentPane(content);
-        this.setTitle("Count Words");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack(); 
         this.setLocationRelativeTo(null); 
