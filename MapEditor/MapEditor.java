@@ -202,7 +202,10 @@ class Action implements ActionListener {
 	}
 	public void printMap(File Save) throws IOException
 	{
-		
+		if(!Save.toString().endsWith(".map"))
+		{
+			Save = new File(Save +".map");
+		}
 		 BufferedWriter out
 		   = new BufferedWriter(new FileWriter(Save));
 		 out.write(MapEditor.MapHeader);
