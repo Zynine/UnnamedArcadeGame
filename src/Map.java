@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -43,9 +45,9 @@ int rect;
 	} else {
 		parts = line.split("-");
 		String[][] MapPeices = new String[MapX][MapY];
-		PublicMap = MapPeices.clone();
-		ColorValues = MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])].split("+");
+		ColorValues = MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])].split("=");
 		MapPeices[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])] = parts[0];
+		PublicMap = MapPeices.clone();
 		System.out.println(linenumber + ":Red=" + ColorValues[0] + ":Green=" + ColorValues[1] + ":Blue=" + ColorValues[2] + ":DataType="+ColorValues[3]+ " X=" + Integer.parseInt(parts[1]) + "Y=" + Integer.parseInt(parts[1]));
 		}
 		linenumber++;	
@@ -53,10 +55,12 @@ int rect;
 	}
 	  public void paintComponent(Graphics g) {
 		JFrame Game = new JFrame("Game");
+		Graphics2D g2d = (Graphics2D)g;
 		for(int i=0;i<MapX;i++) {
 			for(int j=0;j<MapY;j++) {
-		g.drawRect(i*5, j*5, 5, 5);
-		g.fillRect(i*5, j*5, 4, 4);
+		g2d.drawRect(i*5, j*5, 5, 5);
+		String[] colors = PublicMap[Integer.parseInt(parts[1])][Integer.parseInt(parts[2])].split("=");
+		g2d.setColor(new Color(Integer.parseInt(colors[0]),Integer.parseInt(colors[1]),Integer.parseInt(colors[2])));
 			}
 		}
 		Game.setSize(MapX*5,MapY*5);
