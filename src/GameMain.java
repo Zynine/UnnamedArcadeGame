@@ -34,8 +34,10 @@ public class GameMain extends JFrame {
     static File[] MapFiles;
     static int NumOfMaps;
     static String Name;
+    static int [] StandardX = {1,1,9,9};
+    static int [] StandardY = {1,9,9,1};
 	public static void main(String[] args) throws IOException {
-			GameFrame.setTitle("GeoBalance");
+			GameFrame.setTitle("Möbius");
 			GameFrame.setBounds(0,0,screenSize.width, screenSize.height);
 			GameFrame.setSize(screenSize.width, screenSize.height);
 			GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -240,7 +242,7 @@ class Menu extends JPanel
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, GameMain.width, GameMain.height);
 		g2d.setColor(Color.white);
-		g2d.drawString("GeoBalance", GameMain.width/2, GameMain.height/2-200);
+		g2d.drawString("Möbius", GameMain.width/2, GameMain.height/2-200);
 		g2d.setColor(Color.GREEN);
 		g2d.fillRect(GameMain.width/2-400, GameMain.height/2+100, 200, 50);
 		g2d.setColor(Color.black);
@@ -269,7 +271,7 @@ class SPMenu extends JPanel
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, GameMain.width, GameMain.height);
 		g2d.setColor(Color.white);
-		g2d.drawString("GeoBalance Test Singleplayer Menu", GameMain.width/2, GameMain.height/2-225);
+		g2d.drawString("Möbius Test Singleplayer Menu", GameMain.width/2, GameMain.height/2-225);
 		g2d.setColor(Color.white);
 		g2d.fillRect(GameMain.width/2-200, GameMain.height/2-100, 300, 25);
 		g2d.fillRect(GameMain.width/2-200, GameMain.height/2,300,25);
@@ -297,7 +299,7 @@ class MPMenu extends JPanel
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, GameMain.width, GameMain.height);
 		g2d.setColor(Color.white);
-		g2d.drawString("GeoBalance Test Multiplayer Menu", GameMain.width/2, GameMain.height/2-200);
+		g2d.drawString("Möbius Test Multiplayer Menu", GameMain.width/2, GameMain.height/2-200);
 		g2d.setColor(Color.GREEN);
 		g2d.fillRect(GameMain.width/2, GameMain.height/2-100, 200, 50);
 		g2d.setColor(Color.black);
@@ -318,7 +320,7 @@ class OMenu extends JPanel
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, GameMain.width, GameMain.height);
 		g2d.setColor(Color.white);
-		g2d.drawString("GeoBalance Test Option Menu", GameMain.width/2, GameMain.height/2-200);
+		g2d.drawString("Möbius Test Option Menu", GameMain.width/2, GameMain.height/2-200);
 		g2d.setColor(Color.GREEN);
 		g2d.fillRect(GameMain.width/2, GameMain.height/2-100, 200, 50);
 		g2d.setColor(Color.black);

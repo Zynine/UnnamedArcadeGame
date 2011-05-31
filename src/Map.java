@@ -69,6 +69,7 @@ Game.setTitle(Mapname+" by "+Author);
 Game.setBounds(0,0,screenSize.width, screenSize.height);
 Game.setSize(screenSize.width, screenSize.height);
 Mapwindow = new MapWindow();
+Game.add(new Player(GameMain.Name,0,0,0,0,0,GameMain.StandardX,GameMain.StandardY));
 Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
 Mapwindow.setSize(screenSize.width, screenSize.height);
 Game.add(Mapwindow);
@@ -96,16 +97,17 @@ class MapWindow extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D)g;
-		super.paintComponent(g2d);
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, Map.screenSize.width,Map.screenSize.height);
 		for(int i =0;i<Map.MapX;i++) {
 			for(int j =0; j<Map.MapY;j++) {
 				String[] Data = MapWindow.MapColors[i][j].split("=");
 				g2d.setColor(new Color(Integer.parseInt(Data[0]),Integer.parseInt(Data[1]),Integer.parseInt(Data[2])));
+				g2d.setClip((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
 				g2d.fillRect((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
 				System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
 		}
 		}
+		repaint();
 	}
 }
