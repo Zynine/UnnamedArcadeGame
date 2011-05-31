@@ -214,9 +214,10 @@ class Action implements ActionListener {
 			 for(int j=0;j<MapYi;j++) {
 				 if(MapEditor.MapData[i][j] == null)
 				 {
-					 MapEditor.MapData[i][j] = "0+0+0+0";
-				 }
+					 out.write("0=0=0=0:"+i+"-"+j);
+				 } else {
 				 out.write(MapEditor.MapData[i][j]+":"+i+"-"+j);
+				 }
 				 out.newLine();
 			 }
 		 }

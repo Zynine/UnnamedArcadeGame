@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 
 public class GameMain extends JFrame {
@@ -26,11 +27,13 @@ public class GameMain extends JFrame {
 	static MPMenu MPmenu = new MPMenu();
 	static OMenu Omenu = new OMenu();
 	static JComboBox MapSelect;
+	static JTextArea NameBox;
 	static boolean InMenu,InSPMenu,InMPMenu,InOMenu;
 	static Collection Maps;
 	static File MapDir;
     static File[] MapFiles;
     static int NumOfMaps;
+    static String Name;
 	public static void main(String[] args) throws IOException {
 			GameFrame.setTitle("GeoBalance");
 			GameFrame.setBounds(0,0,screenSize.width, screenSize.height);
@@ -88,8 +91,11 @@ class Mouse implements MouseListener
 		{
 			GameMain.GameFrame.remove(GameMain.menu);
 			GameMain.MapSelect = new JComboBox();
-			GameMain.MapSelect.setSize(300, 50);
+			GameMain.NameBox = new JTextArea("Name");
+			GameMain.NameBox.setSize(300, 25);
+			GameMain.MapSelect.setSize(300, 25);
 			GameMain.MapSelect.setLocation(GameMain.width/2-200, GameMain.height/2-100);
+			GameMain.NameBox.setLocation(GameMain.width/2-200, GameMain.height/2);
 			GameMain.MapSelect.setSelectedIndex(-1);
 			GameMain.CreateMapList();
 			if(GameMain.NumOfMaps != 0)
@@ -99,6 +105,7 @@ class Mouse implements MouseListener
 				GameMain.MapSelect.addItem("You have no maps");
 				GameMain.MapSelect.setMaximumRowCount(0);
 			}
+			GameMain.GameFrame.add(GameMain.NameBox);
 			GameMain.GameFrame.add(GameMain.MapSelect);
 			GameMain.GameFrame.add(GameMain.SPmenu);
 			GameMain.SPmenu.addMouseListener(GameMain.mouse);
@@ -165,7 +172,7 @@ class Mouse implements MouseListener
 			GameMain.InMenu=true;
 			GameMain.InOMenu=false;
 		}
-		if(Within(x,y,GameMain.width/2+150, GameMain.height/2-100,100,50) && GameMain.InSPMenu)//Load Map
+		if(Within(x,y,GameMain.width/2+150, GameMain.height/2-100,100,25) && GameMain.InSPMenu)//Load Map
 		{
 			System.out.println("Loading Map "+GameMain.MapSelect.getSelectedItem());//Loading which map again?
 			try {
@@ -180,6 +187,7 @@ class Mouse implements MouseListener
 				System.out.println("Map stopped loading, internal error. Try again.");
 				e3.printStackTrace();
 			}
+			GameMain.Name = GameMain.NameBox.getText();
 			GameMain.Omenu.setVisible(false);
 			GameMain.menu.setVisible(false);
 			GameMain.InMenu=false;
@@ -263,11 +271,12 @@ class SPMenu extends JPanel
 		g2d.setColor(Color.white);
 		g2d.drawString("GeoBalance Test Singleplayer Menu", GameMain.width/2, GameMain.height/2-225);
 		g2d.setColor(Color.white);
-		g2d.fillRect(GameMain.width/2-200, GameMain.height/2-100, 300, 50);
+		g2d.fillRect(GameMain.width/2-200, GameMain.height/2-100, 300, 25);
+		g2d.fillRect(GameMain.width/2-200, GameMain.height/2,300,25);
 		g2d.setColor(Color.GREEN);
-		g2d.fillRect(GameMain.width/2+150, GameMain.height/2-100, 100, 50);
+		g2d.fillRect(GameMain.width/2+150, GameMain.height/2-100, 100, 25);
 		g2d.setColor(Color.black);
-		g2d.drawString("Load Map", GameMain.width/2+150, GameMain.height/2-75);
+		g2d.drawString("Load Map", GameMain.width/2+150, GameMain.height/2-85);
 		g2d.setColor(Color.GREEN);
 		g2d.fillRect(GameMain.width/2, GameMain.height/2+200, 200, 50);
 		g2d.setColor(Color.black);

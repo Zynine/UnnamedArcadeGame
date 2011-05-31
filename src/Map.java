@@ -25,8 +25,7 @@ static String Mapname = null;
 String Author = null;
 static int MapX = 0;
 static int MapY = 0;
-int MapSize = 0;
-static String[][] MapPeices;
+static int MapSize = 0;
 String[] coords = null;
 static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 public static JFrame Game;
@@ -47,7 +46,8 @@ static String map;
 		Author = peices[1];
 		MapX = Integer.parseInt(peices[2]);
 		MapY = Integer.parseInt(peices[3]);
-		MapSize = MapX * MapY;
+		MapWindow.MapColors = new String[MapX][MapY];
+		MapSize = (MapX) * (MapY);
 		System.out.println(linenumber + ":Map name is " + Mapname);
 		System.out.println(linenumber + ":Map author is " + Author);
 		System.out.println(linenumber + ":Map X length is " + MapX);
@@ -56,28 +56,35 @@ static String map;
 	} else {
 		String [] peices =line.split(":");
 		coords = peices[1].split("-");
-		MapPeices = new String[MapX][MapY];
-		String ColorValues = peices[0];
 		String[] ColorValue = peices[0].split("=");
+		MapWindow.MapColors[Integer.parseInt(coords[0])][Integer.parseInt(coords[1])] = ColorValue[0]+"="+ColorValue[1]+"="+ColorValue[2]+"="+ColorValue[3];
 		System.out.println(linenumber + ":Red=" + ColorValue[0] + ":Green=" + ColorValue[1] + ":Blue=" + ColorValue[2] + ":DataType="+ColorValue[3]+ " X=" + Integer.parseInt(coords[0]) + "Y=" + Integer.parseInt(coords[1]));
 		}
 		linenumber++;	
-		if(linenumber == MapSize-1)
-		{
-	Mapwindow = new MapWindow();
-	Game = new JFrame();
-	Game.setTitle(Mapname+" by "+Author);
-	Game.setBounds(0,0,screenSize.width, screenSize.height);
-	Game.setSize(screenSize.width, screenSize.height);
-	Game.add(Mapwindow);
-	Game.setVisible(true);
-	}
 		}
+	if(MapWindow.MapColors!= null)
+	{
+Game = new JFrame();
+Game.setTitle(Mapname+" by "+Author);
+Game.setBounds(0,0,screenSize.width, screenSize.height);
+Game.setSize(screenSize.width, screenSize.height);
+Mapwindow = new MapWindow();
+Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
+Mapwindow.setSize(screenSize.width, screenSize.height);
+Game.add(Mapwindow);
+Mapwindow.setVisible(true);
+Game.setVisible(true);
+}
 	}
 }
 class MapWindow extends JPanel
 {
-	String[][] temp = new String[Map.MapX][Map.MapY];
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static int linen;
+	static String[][] MapColors;
 	public MapWindow()
 	{
 	}
@@ -85,41 +92,20 @@ class MapWindow extends JPanel
 {
 		repaint();
 }
-	public String[][] GrabMap() throws IOException
-	{
-		BufferedReader reader = new BufferedReader(new FileReader(Map.map));
-		String line;
-		reader.readLine();
-		while((line = reader.readLine()) != null)
-		{
-			String[] parts = line.split(":");
-			for(int i =0;i<Map.MapX;i++) {
-				for(int j =0; i<Map.MapY;j++) {
-					temp[i][j] = parts[0];
-				}
-		}
-			return temp;
-		}
-		return null;
-	}
+
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D)g;
 		super.paintComponent(g2d);
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, Map.screenSize.width,Map.screenSize.height);
 		for(int i =0;i<Map.MapX;i++) {
-			for(int j =0; i<Map.MapY;j++) {
-		String[][] MapData = null;
-		try {
-			MapData = GrabMap();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			for(int j =0; j<Map.MapY;j++) {
+				String[] Data = MapWindow.MapColors[i][j].split("=");
+				g2d.setColor(new Color(Integer.parseInt(Data[0]),Integer.parseInt(Data[1]),Integer.parseInt(Data[2])));
+				g2d.fillRect((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
+				System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
 		}
-		String[] Data = MapData[i][j].split("=");
-		g2d.setColor(new Color(Integer.parseInt(Data[0]), Integer.parseInt(Data[1]), Integer.parseInt(Data[2])));
-		g2d.fillRect(i*5, j*5, 5, 5);
-		System.out.println("Loading chunck "+i+","+j);
-			}
 		}
 	}
 }
