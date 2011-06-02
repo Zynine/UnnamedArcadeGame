@@ -2,20 +2,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Toolkit;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
+
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 
 
-public class Map extends JFrame {
+public class Map extends JFrame  {
 /**
 	 * 
 	 */
@@ -32,6 +33,7 @@ public static JFrame Game;
 static MapWindow Mapwindow;
 int rect;
 static String map;
+Controls controls = new Controls();
 	public Map(String Map) throws NumberFormatException, IOException, InterruptedException
 	{
 		this.map = Map;
@@ -68,10 +70,11 @@ Game = new JFrame();
 Game.setTitle(Mapname+" by "+Author);
 Game.setBounds(0,0,screenSize.width, screenSize.height);
 Game.setSize(screenSize.width, screenSize.height);
-Mapwindow = new MapWindow();
 Game.add(new Player(GameMain.Name,0,0,0,0,0,GameMain.StandardX,GameMain.StandardY));
+Mapwindow = new MapWindow();
 Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
 Mapwindow.setSize(screenSize.width, screenSize.height);
+Mapwindow.addKeyListener(controls);
 Game.add(Mapwindow);
 Mapwindow.setVisible(true);
 Game.setVisible(true);
@@ -97,17 +100,41 @@ class MapWindow extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D)g;
+		//Map
 		g2d.setColor(Color.black);
-		g2d.fillRect(0, 0, Map.screenSize.width,Map.screenSize.height);
 		for(int i =0;i<Map.MapX;i++) {
 			for(int j =0; j<Map.MapY;j++) {
 				String[] Data = MapWindow.MapColors[i][j].split("=");
 				g2d.setColor(new Color(Integer.parseInt(Data[0]),Integer.parseInt(Data[1]),Integer.parseInt(Data[2])));
-				g2d.setClip((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
 				g2d.fillRect((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
-				System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
+				//System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
 		}
 		}
+		g2d.setColor(Color.BLUE);
+		g2d.setClip(Player.User);
+		g2d.fillPolygon(Player.User);
 		repaint();
+		}
+}
+
+class Controls implements KeyListener
+{
+	@Override
+	public void keyPressed(KeyEvent e2) {
+			if(e2.getKeyChar() == KeyEvent.VK_W)
+			{
+				Player.Move(0, 100);
+				Map.Mapwindow.repaint();
+			}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		
 	}
 }
