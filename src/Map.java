@@ -4,32 +4,17 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Toolkit;
-<<<<<<< HEAD
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-=======
-import java.awt.event.*;
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-<<<<<<< HEAD
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-=======
-
-import javax.swing.*;
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
-
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 
-<<<<<<< HEAD
+
 public class Map extends JFrame implements KeyListener  {
-=======
-
-public class Map extends JFrame  {
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
 /**
 	 * 
 	 */
@@ -46,11 +31,7 @@ public static JFrame Game;
 static MapWindow Mapwindow;
 int rect;
 static String map;
-<<<<<<< HEAD
 static Player player;
-=======
-Controls controls = new Controls();
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
 	public Map(String Map) throws NumberFormatException, IOException, InterruptedException
 	{
 		this.map = Map;
@@ -87,7 +68,6 @@ Game = new JFrame();
 Game.setTitle(Mapname+" by "+Author);
 Game.setBounds(0,0,screenSize.width, screenSize.height);
 Game.setSize(screenSize.width, screenSize.height);
-<<<<<<< HEAD
 Mapwindow = new MapWindow();
 Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
 Mapwindow.setSize(screenSize.width, screenSize.height);
@@ -95,13 +75,6 @@ player = new Player(GameMain.NameBox.getText(), 100, 1, 1, 0, 0,GameMain.Standar
 player.setBounds(0,0,GameMain.screenSize.width, GameMain.screenSize.height);
 player.setSize(GameMain.screenSize.width, GameMain.screenSize.height);
 player.setVisible(true);
-=======
-Game.add(new Player(GameMain.Name,0,0,0,0,0,GameMain.StandardX,GameMain.StandardY));
-Mapwindow = new MapWindow();
-Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
-Mapwindow.setSize(screenSize.width, screenSize.height);
-Mapwindow.addKeyListener(controls);
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
 Game.add(Mapwindow);
 Game.addKeyListener(this);
 Game.add(player);
@@ -178,8 +151,8 @@ class MapWindow extends JPanel
 	public void paintComponent(Graphics g)
 	{		//Maps
 		Graphics2D g2d = (Graphics2D)g;
-		//Map
 		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, Map.screenSize.width,Map.screenSize.height);
 		for(int i =0;i<Map.MapX;i++) {
 			for(int j =0; j<Map.MapY;j++) {
 				String[] Data = MapWindow.MapColors[i][j].split("=");
@@ -188,7 +161,6 @@ class MapWindow extends JPanel
 				//System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
 		}
 		}
-<<<<<<< HEAD
 		//Player
 		g2d.setColor(Color.BLUE);
 		int SpawnX = Player.SpawnCoords[0];
@@ -197,33 +169,5 @@ class MapWindow extends JPanel
 	//	System.out.println("Spawning at location, "+Player.DrawX[0]+","+Player.DrawY[0]);
 		g2d.fillPolygon(Player.User);
 		super.repaint();
-=======
-		g2d.setColor(Color.BLUE);
-		g2d.setClip(Player.User);
-		g2d.fillPolygon(Player.User);
-		repaint();
-		}
-}
-
-class Controls implements KeyListener
-{
-	@Override
-	public void keyPressed(KeyEvent e2) {
-			if(e2.getKeyChar() == KeyEvent.VK_W)
-			{
-				Player.Move(0, 100);
-				Map.Mapwindow.repaint();
-			}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		
->>>>>>> ed6b8ca33841fec2b41305f2f8ac1d51fb88e19e
 	}
 }
