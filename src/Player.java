@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
@@ -12,10 +13,12 @@ String Name;
 int MoveSpeed;
 int Damage;
 int PosX,PosY;
-int[] DrawX,DrawY;
+static int[] DrawX;
+static int[] DrawY;
 int[] CurrentX, CurrentY;
-boolean Spawn= false;
-java.awt.Polygon User;
+static int[] SpawnCoords = new int[2];;
+static java.awt.Polygon User;
+static String KeepTrack;
 	public Player(String n, int h, int d, int m, int x, int y, int[] PointX, int[] PointY)
 	{
 		this.Name = n;
@@ -26,32 +29,28 @@ java.awt.Polygon User;
 		this.PosY = y;
 		this.DrawX = PointX;
 		this.DrawY = PointY;
-		if(x ==0 ||y ==0)
-		{
-			Spawn = true;
-		}
-		Map.Game.repaint();
+		DetectSpawn();
+		this.repaint();
 	}
-	public void Move(int x, int y)
+	public static void Move(int x, int y, int time)
 	{
 		for(int i = 0;i<DrawX.length; i++)
 		{
-			DrawX[i]= DrawX[i]+x;
+			DrawX[i]= DrawX[i]-(x*(Map.screenSize.width/10));
 		}
 		for(int j = 0;j<DrawY.length; j++)
 		{
-			DrawY[j]= DrawY[j]+y;
+			DrawY[j]= DrawY[j]-(y*(Map.screenSize.height/10));
 		}
-		Map.Game.repaint();
+		
+		Map.Mapwindow.repaint();
 	}
 	public void Fire()
 	{
 		
 	}
-	public int[] DetectSpawn()
+	public void DetectSpawn()
 	{
-		int[] None= {0,0};
-		int[] SpawnCoords = new int[2];
 		for(int i =0;i<Map.MapX;i++)
 		{
 			for(int j =0;j<Map.MapY;j++)
@@ -61,36 +60,26 @@ java.awt.Polygon User;
 		{
 			SpawnCoords[0] = (Map.screenSize.width/Map.MapX*j);
 			SpawnCoords[1] = (Map.screenSize.height/Map.MapY*i);
-			Spawn = true;
-			return SpawnCoords;
+			KeepTrack = i+","+j;
+			this.repaint();
 			}
 		}
 		}
-		return None;
-		
-	}
-	public void paintComponent(Graphics g) // Draw Player
-	{
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(Color.BLUE);
-		if(Spawn = true)
+		int SpawnX = SpawnCoords[0];
+		int SpawnY = SpawnCoords[1];
+		for(int i = 0;i<Player.DrawX.length; i++)
 		{
-			int[] Spawncoords = DetectSpawn();
-			int SpawnX = Spawncoords[0];
-			int SpawnY = Spawncoords[1];
-			for(int i = 0;i<DrawX.length; i++)
-			{
-				DrawX[i]= DrawX[i]+(Map.screenSize.width/Map.MapX)+SpawnX;
-			}
-			for(int j = 0;j<DrawY.length; j++)
-			{
-				DrawY[j]= DrawY[j]+(Map.screenSize.width/Map.MapY)+SpawnY;
-			}
-			g2d.fillPolygon(DrawX ,DrawY, DrawX.length);
+			Player.DrawX[i]= Player.DrawX[i]+SpawnX;
 		}
-		User = new Polygon(DrawX, DrawY, DrawX.length);
-		g2d.setClip(User);
-		g2d.fillPolygon(User);
-		Map.Game.repaint();
+		for(int j = 0;j<Player.DrawY.length; j++)
+		{
+			Player.DrawY[j]= Player.DrawY[j]+SpawnY-(Map.screenSize.height/Map.MapY);
+		}
+		this.repaint();
+	}
+	public boolean CheckBlock()
+	{
+		
+		return false;
 	}
 }

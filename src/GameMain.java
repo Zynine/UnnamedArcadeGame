@@ -34,8 +34,8 @@ public class GameMain extends JFrame {
     static File[] MapFiles;
     static int NumOfMaps;
     static String Name;
-    static int [] StandardX = {1,1,9,9};
-    static int [] StandardY = {1,9,9,1};
+    static int [] StandardX = {1,1,(Map.screenSize.width/10)-1,(Map.screenSize.width/10)-1};
+    static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height/10)-1,1};
 	public static void main(String[] args) throws IOException {
 			GameFrame.setTitle("Möbius");
 			GameFrame.setBounds(0,0,screenSize.width, screenSize.height);
