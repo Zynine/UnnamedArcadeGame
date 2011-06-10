@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="MapEditor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar">
+	<classpathentry kind="lib" path="C:/Documents and Settings/Foti.Domen/workspace/UnnamedArcadeGame/lib/lwjgl.jar" sourcepath="lib">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="UnnamedArcadegame/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="UnnamedArcadeGame/lib"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

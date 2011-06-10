@@ -97,7 +97,7 @@ class MapWindow extends JPanel
 			renderGL();
 			UpdatePlayer();
 			Display.update();
-			Display.sync(60); // cap fps to 60fps
+			Display.sync(120); // cap fps to 60fps
 		}
  
 		Display.destroy();
@@ -118,25 +118,33 @@ class MapWindow extends JPanel
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_W)
 		    		{
 		    			Player.Move(0,1,0);
-		    			Player.PosX = Player.PosX+1;
+		    			//Player.PosX = Player.PosX+1;
 		    			System.out.println("Moved from "+(Player.PosX-1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);		    		}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_S)
 		    		{
 		    			Player.Move(0,-1,0);
-		    			Player.PosX = Player.PosX-1;
+		    			//Player.PosX = Player.PosX-1;
 		    			System.out.println("Moved from "+(Player.PosX+1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);
 		    		}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_D)
 		    		{
 		    			Player.Move(-1,0,0);
-		    			Player.PosY = Player.PosY+1;
+		    			//Player.PosY = Player.PosY+1;
 		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY-1)+" to "+Player.PosX+","+Player.PosY);
 		    			}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_A)
 		    		{
 		    			Player.Move(1,0,0);
-		    			Player.PosY = Player.PosY-1;
+		    			//Player.PosY = Player.PosY-1;
 		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY+1)+" to "+Player.PosX+","+Player.PosY);
+		    		}
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_J)
+		    		{
+		    			System.out.println("Player is at "+Player.DrawX[0]+","+Player.DrawY[0]);
+		    		}
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_K)
+		    		{
+		    			System.out.println("Spawn is at "+Player.SpawnCoords[0]+","+Player.SpawnCoords[1]);
 		    		}
 		    		System.out.println("Key that was hit was "+Keyboard.getEventKey());
 		    }
@@ -244,10 +252,10 @@ class MapWindow extends JPanel
 	public static void UpdatePlayer() {
 		GL11.glPushMatrix();
 		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glColor3d(255 ,255 ,255);
 		for(int i = 0;i<Player.DrawX.length; i++)
 		{
-				GL11.glVertex3f(Player.DrawX[i],Player.DrawY[i],-1);
+				GL11.glColor3d(100 ,0 ,100);
+				GL11.glVertex2d(Player.DrawX[i],Player.DrawY[i]);
 		}
 		GL11.glEnd();
 		GL11.glPopMatrix();
@@ -265,7 +273,7 @@ class MapWindow extends JPanel
  
 		// R,G,B,A Set The Color To Blue One Time Only
 		GL11.glColor3d(0, 0, 0);
-		DisplayMode temp = Display.getDisplayMode();
+
 		// draw quad
 		for(int i =0;i<10;i++) {
 			for(int j =0; j<10;j++) {
@@ -278,10 +286,10 @@ class MapWindow extends JPanel
 				int b = Integer.parseInt(Data[2]);
 				GL11.glColor3d(r ,g ,b);
 				GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex3f((temp.getWidth()/10)*j, (temp.getHeight()/10)*i,0);
-				GL11.glVertex3f((temp.getWidth()/10)*j, (temp.getHeight()/10)*i+100,0);
-				GL11.glVertex3f((temp.getWidth()/10)*j+100, (temp.getHeight()/10)*i+100,0);
-				GL11.glVertex3f((temp.getWidth()/10)*j+100, (temp.getHeight()/10)*i,0);
+				GL11.glVertex3f((Display.getDisplayMode().getWidth()/10)*j, (Display.getDisplayMode().getHeight()/10)*i,0);
+				GL11.glVertex3f((Display.getDisplayMode().getWidth()/10)*j, (Display.getDisplayMode().getHeight()/10)*i+100,0);
+				GL11.glVertex3f((Display.getDisplayMode().getWidth()/10)*j+100, (Display.getDisplayMode().getHeight()/10)*i+100,0);
+				GL11.glVertex3f((Display.getDisplayMode().getWidth()/10)*j+100, (Display.getDisplayMode().getHeight()/10)*i,0);
 			GL11.glEnd();
 		GL11.glPopMatrix();
 		}

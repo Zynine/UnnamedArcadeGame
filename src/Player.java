@@ -1,5 +1,7 @@
 import javax.swing.JPanel;
 
+import org.lwjgl.opengl.Display;
+
 
 public class Player{
 int Health;
@@ -12,8 +14,8 @@ static int[] DrawX;
 static int[] DrawY;
 int[] CurrentX, CurrentY;
 static int[] SpawnCoords = new int[2];;
-static int [] StandardX = {1,1,(Map.screenSize.width/10)-1,(Map.screenSize.width/10)-1};
-static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height/10)-1,1};
+static int [] StandardX = {0,0,35,35};
+static int [] StandardY = {0,35,35,0};
 	public Player(String n, int h, int d, int m, int x, int y, int[] PointX, int[] PointY)
 	{
 		this.Name = n;
@@ -40,11 +42,11 @@ static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height
 	{
 		for(int i = 0;i<DrawX.length; i++)
 		{
-			DrawX[i]= DrawX[i]-(x*(Map.screenSize.width/10));
+			DrawX[i]= DrawX[i]-(x*(Display.getDisplayMode().getWidth()/10));
 		}
 		for(int j = 0;j<DrawY.length; j++)
 		{
-			DrawY[j]= DrawY[j]-(y*(Map.screenSize.height/10));
+			DrawY[j]= DrawY[j]-(y*(Display.getDisplayMode().getHeight()/10));
 		}
 
 	}
@@ -61,24 +63,20 @@ static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height
 		String[] Data = MapWindow.MapColors[i][j].split("=");
 		if(Integer.parseInt(Data[3]) == 2)
 		{
-			SpawnCoords[0] = (Map.screenSize.width/10*j);
-			SpawnCoords[1] = (Map.screenSize.height/10*i);
-			PosX = j;
-			PosY = i;
+			SpawnCoords[0] = (Display.getDisplayMode().getWidth()/10)*j;
+			SpawnCoords[1] = Display.getDisplayMode().getHeight()-((Display.getDisplayMode().getHeight()/10)*i);
 			}
 		}
 		}
-		int SpawnX = SpawnCoords[0];
-		int SpawnY = SpawnCoords[1];
 		for(int i = 0;i<Player.DrawX.length; i++)
 		{
-			Player.DrawX[i]= Player.DrawX[i]+SpawnX;
+			Player.DrawX[i]= Player.DrawX[i]+SpawnCoords[0];
 		}
 		for(int j = 0;j<Player.DrawY.length; j++)
 		{
-			Player.DrawY[j]= Player.DrawY[j]+SpawnY-(Map.screenSize.height/10);
+			Player.DrawY[j]= Player.DrawY[j]+SpawnCoords[1];
 		}
-		System.out.println("Spawning at "+SpawnX+","+SpawnY);
+		System.out.println("Spawning at "+Player.DrawX[0]+","+Player.DrawY[0]);
 	}
 	public boolean CheckBlock()
 	{

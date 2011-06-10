@@ -175,6 +175,7 @@ class Mouse implements MouseListener
 			System.out.println("Loading Map "+GameMain.MapSelect.getSelectedItem());//Loading which map again?
 			try {
 				new Map(GameMain.MapSelect.getSelectedItem().toString());
+				GameMain.GameFrame.setVisible(false);
 			} catch (NumberFormatException e1) {
 				System.out.println("Some sort of internal error. Must. Fix.");
 				e1.printStackTrace();

@@ -1,0 +1,188 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x035ec086, pid=3532, tid=3900
+#
+# Java VM: Java HotSpot(TM) Client VM (10.0-b23 mixed mode, sharing windows-x86)
+# Problematic frame:
+# C  [ig4dev32.dll+0xc086]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x02b2e000):  JavaThread "AWT-EventQueue-0" [_thread_in_native, id=3900, stack(0x03090000,0x030e0000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x00000001
+
+Registers:
+EAX=0x0cd46c01, EBX=0x00106eb4, ECX=0x00106eb0, EDX=0x0010a8c4
+ESP=0x030df184, EBP=0x0015c700, ESI=0x00000001, EDI=0x00106eb4
+EIP=0x035ec086, EFLAGS=0x00010202
+
+Top of Stack: (sp=0x030df184)
+0x030df184:   7ff40000 0010a8c4 00000000 00000000
+0x030df194:   0010a8c4 0b8ea832 0cd46c38 0b8ca815
+0x030df1a4:   7ff40000 0010a7c0 030df2d0 00000000
+0x030df1b4:   0ba86e99 0010a800 02b2e000 02b2e2ac
+0x030df1c4:   0000153d 00000000 00394dc8 02b2e000
+0x030df1d4:   02aeae68 030df2d4 02b2e2bc 0000000b
+0x030df1e4:   6d99cb80 02b2e2cc 00000000 00000000
+0x030df1f4:   0000003c 00000000 00000000 00000000 
+
+Instructions: (pc=0x035ec086)
+0x035ec076:   10 8d 79 04 8b f7 33 db 85 f6 74 3e 8b 54 24 10
+0x035ec086:   39 16 74 0b 8b de 8b 76 08 85 f6 75 ef eb 2b 8b 
+
+
+Stack: [0x03090000,0x030e0000],  sp=0x030df184,  free space=316k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [ig4dev32.dll+0xc086]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::StubRoutines (1)
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x03183800 JavaThread "TimerQueue" daemon [_thread_blocked, id=2968, stack(0x03480000,0x034d0000)]
+  0x00395800 JavaThread "DestroyJavaVM" [_thread_blocked, id=2404, stack(0x003b0000,0x00400000)]
+=>0x02b2e000 JavaThread "AWT-EventQueue-0" [_thread_in_native, id=3900, stack(0x03090000,0x030e0000)]
+  0x02ae9c00 JavaThread "AWT-Windows" daemon [_thread_in_native, id=3540, stack(0x02ec0000,0x02f10000)]
+  0x02ae9000 JavaThread "AWT-Shutdown" [_thread_blocked, id=2944, stack(0x02e70000,0x02ec0000)]
+  0x02ae7000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=2204, stack(0x02e20000,0x02e70000)]
+  0x02a66000 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=1776, stack(0x02d10000,0x02d60000)]
+  0x02a58000 JavaThread "CompilerThread0" daemon [_thread_blocked, id=3408, stack(0x02cc0000,0x02d10000)]
+  0x02a57000 JavaThread "Attach Listener" daemon [_thread_blocked, id=2376, stack(0x02c70000,0x02cc0000)]
+  0x02a56000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=3832, stack(0x02c20000,0x02c70000)]
+  0x02a51800 JavaThread "Finalizer" daemon [_thread_blocked, id=4076, stack(0x02bd0000,0x02c20000)]
+  0x02a4d400 JavaThread "Reference Handler" daemon [_thread_blocked, id=2760, stack(0x02b80000,0x02bd0000)]
+
+Other Threads:
+  0x02a4c000 VMThread [stack: 0x02b30000,0x02b80000] [id=1472]
+  0x02a67000 WatcherThread [stack: 0x02d60000,0x02db0000] [id=4088]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 960K, used 728K [0x22970000, 0x22a70000, 0x22e50000)
+  eden space 896K,  81% used [0x22970000, 0x22a26218, 0x22a50000)
+  from space 64K,   0% used [0x22a50000, 0x22a50188, 0x22a60000)
+  to   space 64K,   0% used [0x22a60000, 0x22a60000, 0x22a70000)
+ tenured generation   total 4096K, used 714K [0x22e50000, 0x23250000, 0x26970000)
+   the space 4096K,  17% used [0x22e50000, 0x22f02850, 0x22f02a00, 0x23250000)
+ compacting perm gen  total 12288K, used 1187K [0x26970000, 0x27570000, 0x2a970000)
+   the space 12288K,   9% used [0x26970000, 0x26a98f08, 0x26a99000, 0x27570000)
+    ro space 8192K,  62% used [0x2a970000, 0x2ae72ba0, 0x2ae72c00, 0x2b170000)
+    rw space 12288K,  52% used [0x2b170000, 0x2b7b88e0, 0x2b7b8a00, 0x2bd70000)
+
+Dynamic libraries:
+0x00400000 - 0x00423000 	C:\Program Files\Java\jre1.6.0_07\bin\javaw.exe
+0x7c900000 - 0x7c9b2000 	C:\WINDOWS\system32\ntdll.dll
+0x7c800000 - 0x7c8f6000 	C:\WINDOWS\system32\kernel32.dll
+0x77dd0000 - 0x77e6b000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x77e70000 - 0x77f03000 	C:\WINDOWS\system32\RPCRT4.dll
+0x77fe0000 - 0x77ff1000 	C:\WINDOWS\system32\Secur32.dll
+0x7e410000 - 0x7e4a1000 	C:\WINDOWS\system32\USER32.dll
+0x77f10000 - 0x77f59000 	C:\WINDOWS\system32\GDI32.dll
+0x76390000 - 0x763ad000 	C:\WINDOWS\system32\IMM32.DLL
+0x7c340000 - 0x7c396000 	C:\Program Files\Java\jre1.6.0_07\bin\msvcr71.dll
+0x6d7c0000 - 0x6da10000 	C:\Program Files\Java\jre1.6.0_07\bin\client\jvm.dll
+0x76b40000 - 0x76b6d000 	C:\WINDOWS\system32\WINMM.dll
+0x6d270000 - 0x6d278000 	C:\Program Files\Java\jre1.6.0_07\bin\hpi.dll
+0x76bf0000 - 0x76bfb000 	C:\WINDOWS\system32\PSAPI.DLL
+0x6d770000 - 0x6d77c000 	C:\Program Files\Java\jre1.6.0_07\bin\verify.dll
+0x6d310000 - 0x6d32f000 	C:\Program Files\Java\jre1.6.0_07\bin\java.dll
+0x6d7b0000 - 0x6d7bf000 	C:\Program Files\Java\jre1.6.0_07\bin\zip.dll
+0x6d000000 - 0x6d12e000 	C:\Program Files\Java\jre1.6.0_07\bin\awt.dll
+0x73000000 - 0x73026000 	C:\WINDOWS\system32\WINSPOOL.DRV
+0x77c10000 - 0x77c68000 	C:\WINDOWS\system32\msvcrt.dll
+0x774e0000 - 0x7761e000 	C:\WINDOWS\system32\ole32.dll
+0x5ad70000 - 0x5ada8000 	C:\WINDOWS\system32\uxtheme.dll
+0x73760000 - 0x737ab000 	C:\WINDOWS\system32\ddraw.dll
+0x73bc0000 - 0x73bc6000 	C:\WINDOWS\system32\DCIMAN32.dll
+0x6d210000 - 0x6d263000 	C:\Program Files\Java\jre1.6.0_07\bin\fontmanager.dll
+0x74720000 - 0x7476c000 	C:\WINDOWS\system32\MSCTF.dll
+0x10000000 - 0x1000c000 	C:\WINDOWS\system32\cwAgent.dll
+0x77f60000 - 0x77fd6000 	C:\WINDOWS\system32\SHLWAPI.dll
+0x77c00000 - 0x77c08000 	C:\WINDOWS\system32\VERSION.dll
+0x755c0000 - 0x755ee000 	C:\WINDOWS\system32\msctfime.ime
+0x7c9c0000 - 0x7d1d7000 	C:\WINDOWS\system32\shell32.dll
+0x773d0000 - 0x774d3000 	C:\WINDOWS\WinSxS\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.6028_x-ww_61e65202\comctl32.dll
+0x5d090000 - 0x5d12a000 	C:\WINDOWS\system32\comctl32.dll
+0x6d570000 - 0x6d583000 	C:\Program Files\Java\jre1.6.0_07\bin\net.dll
+0x71ab0000 - 0x71ac7000 	C:\WINDOWS\system32\WS2_32.dll
+0x71aa0000 - 0x71aa8000 	C:\WINDOWS\system32\WS2HELP.dll
+0x6d590000 - 0x6d599000 	C:\Program Files\Java\jre1.6.0_07\bin\nio.dll
+0x034d0000 - 0x03542000 	C:\Documents and Settings\Foti.Domen\workspace\UnnamedArcadeGame\lib\lwjgl.dll
+0x5ed00000 - 0x5edcc000 	C:\WINDOWS\system32\OPENGL32.dll
+0x68b20000 - 0x68b40000 	C:\WINDOWS\system32\GLU32.dll
+0x0b8a0000 - 0x0bc5c000 	C:\WINDOWS\system32\ig4icd32.dll
+0x035e0000 - 0x03813000 	C:\WINDOWS\system32\ig4dev32.dll
+0x73b30000 - 0x73b45000 	C:\WINDOWS\system32\mscms.dll
+0x66e90000 - 0x66ed1000 	C:\WINDOWS\system32\icm32.dll
+
+VM Arguments:
+jvm_args: -Djava.library.path=C:\Documents and Settings\Foti.Domen\workspace\UnnamedArcadeGame\lib -Dfile.encoding=Cp1252 
+java_command: GameMain
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+CLASSPATH=.;C:\Program Files\Java\jre1.6.0_07\lib\ext\QTJava.zip
+PATH=C:/Program Files/Java/jre6/bin/client;C:/Program Files/Java/jre6/bin;C:/Program Files/Java/jre6/lib/i386;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\QuickTime\QTSystem\;C:\Program Files\Intel\DMIX;C:\Documents and Settings\Foti.Domen\Desktop\eclipse;
+USERNAME=Foti.Domen
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows XP Build 2600 Service Pack 3
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 13, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+Memory: 4k page, physical 2086604k(1114424k free), swap 4024624k(3163216k free)
+
+vm_info: Java HotSpot(TM) Client VM (10.0-b23) for windows-x86 JRE (1.6.0_07-b06), built on Jun 10 2008 01:14:11 by "java_re" with MS VC++ 7.1
+
+time: Fri Jun 10 08:16:03 2011
+elapsed time: 33 seconds
+
