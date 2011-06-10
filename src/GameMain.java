@@ -1,17 +1,15 @@
-import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.Scanner;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import org.lwjgl.LWJGLException;
 
 
 public class GameMain extends JFrame {
@@ -34,8 +32,6 @@ public class GameMain extends JFrame {
     static File[] MapFiles;
     static int NumOfMaps;
     static String Name;
-    static int [] StandardX = {1,1,(Map.screenSize.width/10)-1,(Map.screenSize.width/10)-1};
-    static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height/10)-1,1};
 	public static void main(String[] args) throws IOException {
 			GameFrame.setTitle("Möbius");
 			GameFrame.setBounds(0,0,screenSize.width, screenSize.height);
@@ -188,6 +184,9 @@ class Mouse implements MouseListener
 			} catch (InterruptedException e3) {
 				System.out.println("Map stopped loading, internal error. Try again.");
 				e3.printStackTrace();
+			} catch (LWJGLException e4) {
+				// TODO Auto-generated catch block
+				e4.printStackTrace();
 			}
 			GameMain.Name = GameMain.NameBox.getText();
 			GameMain.Omenu.setVisible(false);

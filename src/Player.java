@@ -1,36 +1,40 @@
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.Polygon;
-import java.awt.geom.AffineTransform;
-
 import javax.swing.JPanel;
 
 
-public class Player extends JPanel {
+public class Player{
 int Health;
 String Name;
 int MoveSpeed;
 int Damage;
-int PosX,PosY;
+static int PosX;
+static int PosY;
 static int[] DrawX;
 static int[] DrawY;
 int[] CurrentX, CurrentY;
 static int[] SpawnCoords = new int[2];;
-static java.awt.Polygon User;
-static String KeepTrack;
+static int [] StandardX = {1,1,(Map.screenSize.width/10)-1,(Map.screenSize.width/10)-1};
+static int [] StandardY = {1,(Map.screenSize.height/10)-1,(Map.screenSize.height/10)-1,1};
 	public Player(String n, int h, int d, int m, int x, int y, int[] PointX, int[] PointY)
 	{
 		this.Name = n;
 		this.Health = h;
 		this.Damage = d;
 		this.MoveSpeed = m;
-		this.PosX = x;
-		this.PosY = y;
-		this.DrawX = PointX;
-		this.DrawY = PointY;
-		DetectSpawn();
-		this.repaint();
+		if (PointX == null || PointY == null)
+		{
+		Player.DrawX = StandardX;
+		Player.DrawY = StandardY;
+		} else {
+		Player.DrawX = PointX;
+		Player.DrawY = PointY;
+		}
+		if (x == 0 || y == 0)
+		{
+			DetectSpawn();
+		} else {
+		Player.PosX = x;
+		Player.PosY = y;
+		}
 	}
 	public static void Move(int x, int y, int time)
 	{
@@ -42,8 +46,7 @@ static String KeepTrack;
 		{
 			DrawY[j]= DrawY[j]-(y*(Map.screenSize.height/10));
 		}
-		
-		Map.Mapwindow.repaint();
+
 	}
 	public void Fire()
 	{
@@ -51,17 +54,17 @@ static String KeepTrack;
 	}
 	public void DetectSpawn()
 	{
-		for(int i =0;i<Map.MapX;i++)
+		for(int i =0;i<10;i++)
 		{
-			for(int j =0;j<Map.MapY;j++)
+			for(int j =0;j<10;j++)
 			{
 		String[] Data = MapWindow.MapColors[i][j].split("=");
 		if(Integer.parseInt(Data[3]) == 2)
 		{
-			SpawnCoords[0] = (Map.screenSize.width/Map.MapX*j);
-			SpawnCoords[1] = (Map.screenSize.height/Map.MapY*i);
-			KeepTrack = i+","+j;
-			this.repaint();
+			SpawnCoords[0] = (Map.screenSize.width/10*j);
+			SpawnCoords[1] = (Map.screenSize.height/10*i);
+			PosX = j;
+			PosY = i;
 			}
 		}
 		}
@@ -73,9 +76,9 @@ static String KeepTrack;
 		}
 		for(int j = 0;j<Player.DrawY.length; j++)
 		{
-			Player.DrawY[j]= Player.DrawY[j]+SpawnY-(Map.screenSize.height/Map.MapY);
+			Player.DrawY[j]= Player.DrawY[j]+SpawnY-(Map.screenSize.height/10);
 		}
-		this.repaint();
+		System.out.println("Spawning at "+SpawnX+","+SpawnY);
 	}
 	public boolean CheckBlock()
 	{

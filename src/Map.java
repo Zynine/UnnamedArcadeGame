@@ -1,20 +1,21 @@
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.DoubleBuffer;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
 
 
-
-public class Map extends JFrame implements KeyListener  {
+public class Map extends JFrame  {
 /**
 	 * 
 	 */
@@ -32,7 +33,7 @@ static MapWindow Mapwindow;
 int rect;
 static String map;
 static Player player;
-	public Map(String Map) throws NumberFormatException, IOException, InterruptedException
+	public Map(String Map) throws NumberFormatException, IOException, InterruptedException, LWJGLException
 	{
 		this.map = Map;
 	BufferedReader reader = new BufferedReader(new FileReader(Map));
@@ -58,116 +59,233 @@ static Player player;
 		coords = peices[1].split("-");
 		String[] ColorValue = peices[0].split("=");
 		MapWindow.MapColors[Integer.parseInt(coords[0])][Integer.parseInt(coords[1])] = ColorValue[0]+"="+ColorValue[1]+"="+ColorValue[2]+"="+ColorValue[3];
-		System.out.println(linenumber + ":Red=" + ColorValue[0] + ":Green=" + ColorValue[1] + ":Blue=" + ColorValue[2] + ":DataType="+ColorValue[3]+ " X=" + Integer.parseInt(coords[0]) + "Y=" + Integer.parseInt(coords[1]));
+		//System.out.println(linenumber + ":Red=" + ColorValue[0] + ":Green=" + ColorValue[1] + ":Blue=" + ColorValue[2] + ":DataType="+ColorValue[3]+ " X=" + Integer.parseInt(coords[0]) + "Y=" + Integer.parseInt(coords[1]));
 		}
 		linenumber++;	
 		}
 	if(MapWindow.MapColors!= null)
 	{
-Game = new JFrame();
-Game.setTitle(Mapname+" by "+Author);
-Game.setBounds(0,0,screenSize.width, screenSize.height);
-Game.setSize(screenSize.width, screenSize.height);
+player = new Player(GameMain.Name,100,100,100,0,0,null,null);
 Mapwindow = new MapWindow();
-Mapwindow.setBounds(0,0,screenSize.width, screenSize.height);
-Mapwindow.setSize(screenSize.width, screenSize.height);
-player = new Player(GameMain.NameBox.getText(), 100, 1, 1, 0, 0,GameMain.StandardX, GameMain.StandardY);
-player.setBounds(0,0,GameMain.screenSize.width, GameMain.screenSize.height);
-player.setSize(GameMain.screenSize.width, GameMain.screenSize.height);
-player.setVisible(true);
-Game.add(Mapwindow);
-Game.addKeyListener(this);
-Game.add(player);
-Mapwindow.setVisible(true);
-player.setVisible(true);
-Game.setVisible(true);
 }
-	}
-	@SuppressWarnings("unused")
-	@Override
-	public void keyPressed(KeyEvent e2) {
-		if(e2.getKeyChar() == 'w')
-		{
-			Player.Move(0,1,0);
-			String[] TestCoords = Player.KeepTrack.split(",");
-			Player.KeepTrack = (Integer.parseInt(TestCoords[0])+1)+","+TestCoords[1];
-			System.out.println("Moved from "+TestCoords[0]+","+TestCoords[1]+" to "+((Integer.parseInt(TestCoords[0]))+1)+","+TestCoords[1]);
-			this.repaint();
-		}
-		if(e2.getKeyChar() == 's')
-		{
-			Player.Move(0,-1,0);
-			String[] TestCoords = Player.KeepTrack.split(",");
-			Player.KeepTrack = (Integer.parseInt(TestCoords[0])-1)+","+TestCoords[1];
-			System.out.println("Moved from "+TestCoords[0]+","+TestCoords[1]+" to "+((Integer.parseInt(TestCoords[0]))-1)+","+TestCoords[1]);
-			this.repaint();
-		}
-		if(e2.getKeyChar() == 'd')
-		{
-			Player.Move(-1,0,0);
-			String[] TestCoords = Player.KeepTrack.split(",");
-			Player.KeepTrack = TestCoords[0]+","+(Integer.parseInt(TestCoords[1])+1);
-			System.out.println("Moved from "+TestCoords[0]+","+TestCoords[1]+" to "+Integer.parseInt(TestCoords[0])+","+((Integer.parseInt(TestCoords[1]))+1));
-			this.repaint();
-		}
-		if(e2.getKeyChar() == 'a')
-		{
-			Player.Move(1,0,0);
-			String[] TestCoords = Player.KeepTrack.split(",");
-			Player.KeepTrack = Integer.parseInt(TestCoords[0])+","+(Integer.parseInt(TestCoords[1])-1);
-			System.out.println("Moved from "+TestCoords[0]+","+TestCoords[1]+" to "+Integer.parseInt(TestCoords[0])+","+((Integer.parseInt(TestCoords[1]))-1));
-			this.repaint();
-		}
-		System.out.println("Key that was hit was "+e2.KEY_PRESSED);
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }
 class MapWindow extends JPanel
 {
+	static int fps;
+	static long lastFPS;
+	static boolean vsync;
+	static long lastFrame;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	static int linen;
 	static String[][] MapColors;
-	public MapWindow()
+	static DoubleBuffer eq;
+	public MapWindow() throws LWJGLException
 	{
-	
+		Display.setDisplayMode(new DisplayMode(800, 600));
+		Display.create();
+		initGL(); // init OpenGL
+		getDelta(); // call once before loop to initialise lastFrame
+		lastFPS = getTime(); // call before loop to initialise fps timer
+		 
+		while (!Display.isCloseRequested()) {
+			int delta = getDelta();
+			update(delta);
+			renderGL();
+			UpdatePlayer();
+			Display.update();
+			Display.sync(60); // cap fps to 60fps
+		}
+ 
+		Display.destroy();
 	}
-	public void main(String[] args)
-{
-		repaint();
-}
 
-	public void paintComponent(Graphics g)
-	{		//Maps
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(Color.black);
-		g2d.fillRect(0, 0, Map.screenSize.width,Map.screenSize.height);
-		for(int i =0;i<Map.MapX;i++) {
-			for(int j =0; j<Map.MapY;j++) {
-				String[] Data = MapWindow.MapColors[i][j].split("=");
-				g2d.setColor(new Color(Integer.parseInt(Data[0]),Integer.parseInt(Data[1]),Integer.parseInt(Data[2])));
-				g2d.fillRect((Map.screenSize.width/(Map.MapX)*j),(Map.screenSize.height/(Map.MapY)*i), Map.screenSize.width/(Map.MapX), Map.screenSize.height/(Map.MapY));
-				//System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
+ 
+	public static void update(int delta) {
+
+		while (Keyboard.next()) {
+		    if (Keyboard.getEventKeyState()) {
+		        if (Keyboard.getEventKey() == Keyboard.KEY_F) {
+		        	setDisplayMode(800, 600, !Display.isFullscreen());
+		        }
+		        else if (Keyboard.getEventKey() == Keyboard.KEY_V) {
+		        	vsync = !vsync;
+		        	Display.setVSyncEnabled(vsync);
+		        }
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_W)
+		    		{
+		    			Player.Move(0,1,0);
+		    			Player.PosX = Player.PosX+1;
+		    			System.out.println("Moved from "+(Player.PosX-1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);		    		}
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_S)
+		    		{
+		    			Player.Move(0,-1,0);
+		    			Player.PosX = Player.PosX-1;
+		    			System.out.println("Moved from "+(Player.PosX+1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);
+		    		}
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_D)
+		    		{
+		    			Player.Move(-1,0,0);
+		    			Player.PosY = Player.PosY+1;
+		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY-1)+" to "+Player.PosX+","+Player.PosY);
+		    			}
+		    		if(Keyboard.getEventKey() == Keyboard.KEY_A)
+		    		{
+		    			Player.Move(1,0,0);
+		    			Player.PosY = Player.PosY-1;
+		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY+1)+" to "+Player.PosX+","+Player.PosY);
+		    		}
+		    		System.out.println("Key that was hit was "+Keyboard.getEventKey());
+		    }
 		}
-		}
-		//Player
-		g2d.setColor(Color.BLUE);
-		int SpawnX = Player.SpawnCoords[0];
-		int SpawnY = Player.SpawnCoords[1];
-		Player.User = new Polygon(Player.DrawX, Player.DrawY, Player.DrawX.length);
-	//	System.out.println("Spawning at location, "+Player.DrawX[0]+","+Player.DrawY[0]);
-		g2d.fillPolygon(Player.User);
-		super.repaint();
+
+		updateFPS(); // update FPS Counter
 	}
+ 
+	/**
+	 * Set the display mode to be used 
+	 * 
+	 * @param width The width of the display required
+	 * @param height The height of the display required
+	 * @param fullscreen True if we want fullscreen mode
+	 */
+	public static void setDisplayMode(int width, int height, boolean fullscreen) {
+
+		// return if requested DisplayMode is already set
+                if ((Display.getDisplayMode().getWidth() == width) && 
+			(Display.getDisplayMode().getHeight() == height) && 
+			(Display.isFullscreen() == fullscreen)) {
+			return;
+		}
+		
+		try {
+			DisplayMode targetDisplayMode = null;
+			
+			if (fullscreen) {
+				DisplayMode[] modes = Display.getAvailableDisplayModes();
+				int freq = 0;
+				
+				for (int i=0;i<modes.length;i++) {
+					DisplayMode current = modes[i];
+					
+					if ((current.getWidth() == width) && (current.getHeight() == height)) {
+						if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
+							if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
+								targetDisplayMode = current;
+								freq = targetDisplayMode.getFrequency();
+							}
+						}
+
+						// if we've found a match for bpp and frequence against the 
+						// original display mode then it's probably best to go for this one
+						// since it's most likely compatible with the monitor
+						if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
+						    (current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
+							targetDisplayMode = current;
+							break;
+						}
+					}
+				}
+			} else {
+				targetDisplayMode = new DisplayMode(width,height);
+			}
+			
+			if (targetDisplayMode == null) {
+				System.out.println("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
+				return;
+			}
+
+			Display.setDisplayMode(targetDisplayMode);
+			Display.setFullscreen(fullscreen);
+			
+		} catch (LWJGLException e) {
+			System.out.println("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
+		}
+	}
+	
+	/** 
+	 * Calculate how many milliseconds have passed 
+	 * since last frame.
+	 * 
+	 * @return milliseconds passed since last frame 
+	 */
+	public static int getDelta() {
+	    long time = getTime();
+	    int delta = (int) (time - lastFrame);
+	    lastFrame = time;
+ 
+	    return delta;
+	}
+ 
+	/**
+	 * Get the accurate system time
+	 * 
+	 * @return The system time in milliseconds
+	 */
+	public static long getTime() {
+	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+ 
+	/**
+	 * Calculate the FPS and set it in the title bar
+	 */
+	public static void updateFPS() {
+		if (getTime() - lastFPS > 1000) {
+			Display.setTitle("FPS: " + fps);
+			fps = 0;
+			lastFPS += 1000;
+		}
+		fps++;
+	}
+ 
+	public static void UpdatePlayer() {
+		GL11.glPushMatrix();
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glColor3d(255 ,255 ,255);
+		for(int i = 0;i<Player.DrawX.length; i++)
+		{
+				GL11.glVertex3f(Player.DrawX[i],Player.DrawY[i],-1);
+		}
+		GL11.glEnd();
+		GL11.glPopMatrix();
+	}
+	public static void initGL() {
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, 800, 600, 0, 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	}
+ 
+	public static void renderGL() {
+		// Clear The Screen And The Depth Buffer
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+ 
+		// R,G,B,A Set The Color To Blue One Time Only
+		GL11.glColor3d(0, 0, 0);
+		DisplayMode temp = Display.getDisplayMode();
+		// draw quad
+		for(int i =0;i<10;i++) {
+			for(int j =0; j<10;j++) {
+		// R,G,B,A Set The Color To Blue One Time Only
+				String[] Data = MapWindow.MapColors[i][j].split("=");
+				//System.out.println("Loading chunck "+i+","+j+" with :"+Data[0]+","+Data[1]+","+Data[2]);
+				GL11.glPushMatrix();
+				int r = Integer.parseInt(Data[0]);
+				int g = Integer.parseInt(Data[1]);
+				int b = Integer.parseInt(Data[2]);
+				GL11.glColor3d(r ,g ,b);
+				GL11.glBegin(GL11.GL_QUADS);
+				GL11.glVertex3f((temp.getWidth()/10)*j, (temp.getHeight()/10)*i,0);
+				GL11.glVertex3f((temp.getWidth()/10)*j, (temp.getHeight()/10)*i+100,0);
+				GL11.glVertex3f((temp.getWidth()/10)*j+100, (temp.getHeight()/10)*i+100,0);
+				GL11.glVertex3f((temp.getWidth()/10)*j+100, (temp.getHeight()/10)*i,0);
+			GL11.glEnd();
+		GL11.glPopMatrix();
+		}
+	}
+	}
+
 }
