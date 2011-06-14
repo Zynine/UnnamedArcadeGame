@@ -123,24 +123,24 @@ class MapWindow extends JPanel
 		        }
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_W)
 		    		{
-		    			Player.Move(0,1,0);
+		    			Player.Move(0,100,0);
 		    			//Player.PosX = Player.PosX+1;
 		    			System.out.println("Moved from "+(Player.PosX-1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);		    		}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_S)
 		    		{
-		    			Player.Move(0,-1,0);
+		    			Player.Move(0,-100,0);
 		    			//Player.PosX = Player.PosX-1;
 		    			System.out.println("Moved from "+(Player.PosX+1)+","+Player.PosY+" to "+Player.PosX+","+Player.PosY);
 		    		}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_D)
 		    		{
-		    			Player.Move(-1,0,0);
+		    			Player.Move(-100,0,0);
 		    			//Player.PosY = Player.PosY+1;
 		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY-1)+" to "+Player.PosX+","+Player.PosY);
 		    			}
 		    		if(Keyboard.getEventKey() == Keyboard.KEY_A)
 		    		{
-		    			Player.Move(1,0,0);
+		    			Player.Move(100,0,0);
 		    			//Player.PosY = Player.PosY-1;
 		    			System.out.println("Moved from "+Player.PosX+","+(Player.PosY+1)+" to "+Player.PosX+","+Player.PosY);
 		    		}
@@ -258,7 +258,30 @@ class MapWindow extends JPanel
 		}
 		fps++;
 	}
- 
+	
+	public static int[][] Mapdata() {
+		int[][] map = new int[Display.getDisplayMode().getWidth()][Display.getDisplayMode().getHeight()];
+		for(int i =0;i<10; i++) {
+			for(int h =0;h<10; h++) {
+				String[] tempdata = Map.MapColors[i][h].split("=");
+				int data = Integer.parseInt(tempdata[3]);
+				for(int j =(Display.getDisplayMode().getWidth()/10)*i; j< (Display.getDisplayMode().getWidth()/10)*i+1; j++) {
+					for(int k =(Display.getDisplayMode().getWidth()/10)*h; k< (Display.getDisplayMode().getWidth()/10)*h+1; k++) {
+						if(j <= Display.getDisplayMode().getWidth() && k <= Display.getDisplayMode().getHeight())
+						{
+						if(data == 1)
+						{
+						map[j][k] = 1;
+						} else {
+							map[j][k] = 0;
+						}
+					}
+				}
+			}
+		}
+		}
+		return map;
+	}
 	public static void UpdatePlayer() {
 		GL11.glPushMatrix();
 		GL11.glBegin(GL11.GL_QUADS);
